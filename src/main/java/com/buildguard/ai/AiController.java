@@ -1,6 +1,6 @@
 package com.buildguard.ai;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,9 +13,23 @@ public class AiController {
         this.aiService = aiService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','PROJECT_ENGINEER')")
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok(aiService.health());
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<String> status() {
+        return ResponseEntity.ok(aiService.status());
+    }
+
     @PostMapping("/analyze")
-    public AiResponse analyze(@RequestBody AiRequest request) {
-        return aiService.analyzeBlueprint(request.getPrompt());
+    public ResponseEntity<String> analyze(@RequestBody AiRequest request) {
+        return ResponseEntity.ok(aiService.analyze(request));
+    }
+
+    @PostMapping("/warning")
+    public ResponseEntity<String> warning(@RequestBody Object request) {
+        return ResponseEntity.ok(aiService.warning(request));
     }
 }

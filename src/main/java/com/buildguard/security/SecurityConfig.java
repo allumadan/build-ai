@@ -27,7 +27,7 @@ public class SecurityConfig {
     private PasswordEncoder passwordEncoder;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -36,10 +36,15 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
                                 "/api/auth/**",
+                                "/api/ai/**",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs",
+                                "/error"
                         ).permitAll()
 
                         .requestMatchers("/api/admin/**")
@@ -66,10 +71,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(
+    public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration)
             throws Exception {
 
         return configuration.getAuthenticationManager();
     }
+
 }

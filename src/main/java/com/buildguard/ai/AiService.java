@@ -2,6 +2,12 @@ package com.buildguard.ai;
 
 public interface AiService {
 
-    AiResponse analyzeBlueprint(String prompt);
+    String health();
+
+    String status();
+
+    String analyze(Object request);
+
+    String warning(Object request);
 
 }
