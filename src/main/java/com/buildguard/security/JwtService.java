@@ -1,6 +1,7 @@
 package com.buildguard.security;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -20,14 +21,15 @@ public class JwtService {
             "BuildGuardSecretKeyBuildGuardSecretKey123456789";
 
     // Token validity: 24 hours
-    private static final long JWT_EXPIRATION = 24 * 60 * 60 * 1000;
+    private static final long JWT_EXPIRATION = Duration.ofHours(24).toMillis();
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(
+                SECRET_KEY.getBytes(StandardCharsets.UTF_8)
+        );
     }
 
     public String generateToken(String email) {
-
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
@@ -45,14 +47,11 @@ public class JwtService {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-
-        final Claims claims = extractAllClaims(token);
-
+        Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -61,14 +60,11 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-
         return extractExpiration(token).before(new Date());
     }
 
     public boolean isTokenValid(String token, String email) {
-
-        final String username = extractUsername(token);
-
+        String username = extractUsername(token);
         return username.equals(email) && !isTokenExpired(token);
     }
 }
