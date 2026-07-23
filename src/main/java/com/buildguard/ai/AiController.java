@@ -29,7 +29,7 @@ public class AiController {
     }
 
     @PostMapping("/warning")
-    public ResponseEntity<String> warning(@RequestBody Object request) {
+    public ResponseEntity<String> warning(@RequestBody WarningRequest request) {
         return ResponseEntity.ok(aiService.warning(request));
     }
 }

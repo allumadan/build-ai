@@ -3,13 +3,13 @@ package com.buildguard.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.buildguard.dto.ScheduleResponseDto;
 import com.buildguard.entity.Project;
 import com.buildguard.entity.Schedule;
+import com.buildguard.exception.ResourceNotFoundException;
 import com.buildguard.mapper.ScheduleMapper;
 import com.buildguard.repository.ProjectRepository;
 import com.buildguard.repository.ScheduleRepository;
@@ -17,6 +17,9 @@ import com.buildguard.service.ScheduleService;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
+
+    private static final String PROJECT_NOT_FOUND = "Project not found";
+    private static final String SCHEDULE_NOT_FOUND = "Schedule not found";
 
     private final ScheduleRepository scheduleRepository;
     private final ProjectRepository projectRepository;
@@ -42,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             Long projectId) {
 
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(PROJECT_NOT_FOUND));
 
         Schedule schedule = new Schedule();
 
@@ -63,14 +66,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findAll()
                 .stream()
                 .map(scheduleMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public ScheduleResponseDto getScheduleById(Long id) {
 
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(SCHEDULE_NOT_FOUND));
 
         return scheduleMapper.toDto(schedule);
     }
@@ -81,7 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findByProjectId(projectId)
                 .stream()
                 .map(scheduleMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -94,7 +97,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             String status) {
 
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(SCHEDULE_NOT_FOUND));
 
         schedule.setTaskName(taskName);
         schedule.setDescription(description);
@@ -109,7 +112,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void deleteSchedule(Long id) {
 
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(SCHEDULE_NOT_FOUND));
 
         scheduleRepository.delete(schedule);
     }

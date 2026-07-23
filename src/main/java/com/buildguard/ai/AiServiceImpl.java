@@ -22,12 +22,12 @@ public class AiServiceImpl implements AiService {
     }
 
     @Override
-    public String analyze(Object request) {
+    public String analyze(AiRequest request) {
         return aiClient.analyze(request);
     }
 
     @Override
-    public String warning(Object request) {
+    public String warning(WarningRequest request) {
         return aiClient.warning(request);
     }
 }

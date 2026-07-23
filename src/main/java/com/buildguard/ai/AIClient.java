@@ -24,11 +24,11 @@ public class AIClient {
         return callGet("/status");
     }
 
-    public String analyze(Object request) {
+    public String analyze(AiRequest request) {
         return callPost("/analyze", request);
     }
 
-    public String warning(Object request) {
+    public String warning(WarningRequest request) {
         return callPost("/warning", request);
     }
 
@@ -44,11 +44,11 @@ public class AIClient {
         }
     }
 
-    private String callPost(String endpoint, Object body) {
+    private String callPost(String endpoint, Object requestBody) {
         try {
             return webClient.post()
                     .uri(baseUrl + endpoint)
-                    .bodyValue(body)
+                    .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();

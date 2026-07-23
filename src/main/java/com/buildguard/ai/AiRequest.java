@@ -3,14 +3,15 @@ package com.buildguard.ai;
 public class AiRequest {
 
     private String report;
-    private String pdf_path;
+    private String pdfPath;
 
     public AiRequest() {
+        // Default constructor
     }
 
-    public AiRequest(String report, String pdf_path) {
+    public AiRequest(String report, String pdfPath) {
         this.report = report;
-        this.pdf_path = pdf_path;
+        this.pdfPath = pdfPath;
     }
 
     public String getReport() {
@@ -21,11 +22,11 @@ public class AiRequest {
         this.report = report;
     }
 
-    public String getPdf_path() {
-        return pdf_path;
+    public String getPdfPath() {
+        return pdfPath;
     }
 
-    public void setPdf_path(String pdf_path) {
-        this.pdf_path = pdf_path;
+    public void setPdfPath(String pdfPath) {
+        this.pdfPath = pdfPath;
     }
 }

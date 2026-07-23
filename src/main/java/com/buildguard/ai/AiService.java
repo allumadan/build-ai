@@ -6,8 +6,8 @@ public interface AiService {
 
     String status();
 
-    String analyze(Object request);
+    String analyze(AiRequest request);
 
-    String warning(Object request);
+    String warning(WarningRequest request);
 
 }
